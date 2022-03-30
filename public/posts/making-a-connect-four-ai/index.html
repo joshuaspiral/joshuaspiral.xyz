@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head><title>Making a Connect Four Ai &ndash; joshuaspiral.xyz</title>
+<meta name="description" content="My personal site">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.1/css/academicons.min.css" integrity="sha512-b1ASx0WHgVFL5ZQhTgiPWX+68KjS38Jk87jg7pe+qC7q9YkEtFq0z7xCglv7qGIs/68d3mAp+StfC8WKC5SSAg==" crossorigin="anonymous" />
+
+
+<link rel="stylesheet" href="https://joshuaspiral.xyz/css/colour/gruvbox-dark.css">
+<link rel="stylesheet" href="https://joshuaspiral.xyz/css/colour/dark-mode.css">
+<link rel="stylesheet" href="https://joshuaspiral.xyz/css/risotto.css">
+<link rel="stylesheet" href="https://joshuaspiral.xyz/css/custom.css">
+</head>
+
+    <body>
+        <div class="page">
+
+            <header class="page__header"><h1 class="page__logo"><a href="https://joshuaspiral.xyz/" class="page__logo-inner">joshuaspiral.xyz</a></h1>
+<nav class="page__nav main-nav">
+    <ul>
+    
+    
+    <li class="main-nav__item"><a class="nav-main-item" href="/about/" title="">about</a></li>
+    
+    <li class="main-nav__item"><a class="nav-main-item" href="/posts/" title="">posts</a></li>
+    
+    </ul>
+</nav>
+
+</header>
+
+            <section class="page__body">
+    <header class="content__header">
+        <h1>Making a Connect Four Ai</h1>
+    </header>
+    <div class="content__body">
+        <h2 id="introduction">Introduction</h2>
+<p>I was tasked with creating a 2D array game for my computer science course, and I first went with Tic Tac Toe. Soon after, I wrote an AI for it using the <a href="https://en.wikipedia.org/wiki/Minimax">minimax</a>. I wrote them in Python because it was nice and easy. However, I wanted speed, so I wrote my first proper C program, <a href="https://github.com/joshuaspiral/tictacc">TicTacC</a>. After having written the AI, I had to create an AI for either <a href="https://en.wikipedia.org/wiki/Connect_Four">Connect Four</a>, <a href="https://en.wikipedia.org/wiki/Reversi">Othello/Reversi</a> or the sliding game <a href="https://en.wikipedia.org/wiki/15_puzzle">15</a>. I picked Connect Four because I had the most experience with the game. I quickly wrote a prototype of the basic game logic in Python, <a href="https://github.com/joshuaspiral/connectfourpy">here is the repo</a>. I became obsessed with creating a better and faster AI, so I went back to C. Here, I document my journey in creating a fast and smart Connect Four AI.</p>
+<h2 id="what-is-connect-four">What is Connect Four?</h2>
+<p>Connect Four, or otherwise known as Four in a Row, is a two player board game where there is a 6x7 vertical grid, where players take turns dropping pieces down columns. To win, a player must connect four pieces of their color together, either vertically, horizontally, or diagonally.</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Connect_Four.gif/220px-Connect_Four.gif" alt="Gameplay of Connect Four - Wikipedia"></p>
+<h2 id="checking-for-a-win">Checking for a win</h2>
+<p>My original game would store the board as a 2D character array, with each cell either holding an UNCLAIMED, YELLOW or RED enum variant.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">enum</span> State {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    YELLOW,
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    RED,
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    UNCLAIMED
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">enum</span> State board[HEIGHT][WIDTH] <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    {UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED},
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    {UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED},
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    {UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED},
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    {UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED},
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    {UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED},
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    {UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED, UNCLAIMED},
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// I know this is not the best way to do this.
+</span></span></span></code></pre></div><p>I would then loop through the board and check if the <code>Board[i + offset][j + offset] == Board[i + offset + 1][j + offset + 1]</code> and so on.  </p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> HEIGHT <span style="color:#f92672">-</span> <span style="color:#ae81ff">3</span>; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> j <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; j <span style="color:#f92672">&lt;</span> WIDTH <span style="color:#f92672">-</span> <span style="color:#ae81ff">3</span>; j<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">/* Primary diagonal check (/) */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (board[i][j] <span style="color:#f92672">==</span> board[i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>][j <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">&amp;&amp;</span> board [i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>][j <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> board[i <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>][j <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>] <span style="color:#f92672">&amp;&amp;</span> board[i <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>][j <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>] <span style="color:#f92672">==</span> board[i <span style="color:#f92672">+</span> <span style="color:#ae81ff">3</span>][j <span style="color:#f92672">+</span> <span style="color:#ae81ff">3</span>] <span style="color:#f92672">&amp;&amp;</span> board[i][j] <span style="color:#f92672">!=</span> UNCLAIMED) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (board[i][j] <span style="color:#f92672">==</span> piece) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                    wins<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">return</span> LOSE;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Extract from evaluateBoard() function in c4c.
+</span></span></span></code></pre></div><p>This is not a very elegant solution as it is O(n^2 * 5) (horizontal, vertical, primary diagonal, secondary diagonal, and checking for draws). However, there are better ways to do this and I will soon get into them.</p>
+<h2 id="the-minimax-algorithm">The minimax algorithm</h2>
+<p>The <a href="https://en.wikipedia.org/wiki/Minimax">minimax algorithm</a> is the most popular decision rule algorithm for games like Tic Tac Toe, Connect Four, and Chess where there are two players taking alternate moves. I wouldn&rsquo;t be able to explain it any better than a YouTube video, so I would recommend <a href="https://www.youtube.com/watch?v=l-hh51ncgDI">this one</a> by Sebastian Lague.  </p>
+<p>The algorithm prioritises certain permutations, set by your evaluation function and heuristic scoring. The depth passed into the algorithm controls how many moves ahead it should search for. The algorithm minimises its losses by picking the moves that would result in an advantage for the AI. There are optimisations for the algorithm, such as alpha-beta pruning which prunes tres that are pointless to evaluate, and move ordering, which is an extension to alpha-beta pruning to sort the moves so there is a higher chance of pruning. </p>
+<h2 id="bitboards">Bitboards</h2>
+<p>Another optimisation for the minimax algorithm is using <a href="https://en.wikipedia.org/wiki/Bitboard">bitboards</a>. Bitboards are binary representations of a board for a specific piece. For example, a Tic Tac Toe grid could look like this:</p>
+<pre tabindex="0"><code>------------
+| X | O | X |
+------------
+|   | X | X |
+-------------
+| O | O |   |
+------------
+</code></pre><p>There would be two bitboards, one for X and one for O.</p>
+<pre tabindex="0"><code>
+X bitboard:
+
+1_0_1_
+
+0_1_1_
+
+0_0_0
+
+O bitboard:
+
+0_1_0_
+
+0_0_0_
+
+1_1_0
+</code></pre><p>These two, of course, would be a little over a byte, so you would use a type like <code>uint16_t</code> to store them as <code>uint16_t X = 0b000000_0101_011_000</code> and <code>uint16_t O = 0b000000_010_000_110</code> (starting 6 bits are just to fill the empty space). Instead of a mess of for loops, you can have unreadable bitwise logic to evaluate the board. For example, to evaluate whether or not a board has 3 in a row horizontally, you can bit shift it by certain offsets, for example:</p>
+<pre tabindex="0"><code>
+  0b000000_010_000_111
+
+  0b000000_010_000_111 &gt;&gt; 1 = 0b000000_001_000_011
+
+&amp; 0b000000_010_000_111 &gt;&gt; 2 = 0b000000_000_100_001
+__________________________________________________
+
+  0b0
+</code></pre><p>We can write this expression as <code>bitboard &amp; (bitboard &gt;&gt; 1) &amp; (bitboard &gt;&gt; 2) != 0)</code> If this evaluates to <code>true</code>, then it is a win.</p>
+<p>You can do this for other offsets too. For columns, you would shift by 3 and 6, and for the primary diagonal (/), you can shift by 2 and 4.</p>
+<pre tabindex="0"><code>
+0 1 2
+
+3 4 5
+
+6 7 8
+</code></pre><p>This grid can help with figuring out the &ldquo;magic&rdquo; numbers.</p>
+<h2 id="1d-array-bitboard">1D array bitboard</h2>
+<p>Before we optimise, let&rsquo;s take a look at the current benchmarks:</p>
+<table>
+<thead>
+<tr>
+<th>Implementation        </th>
+<th>Depth</th>
+<th>Time (s)  </th>
+<th>Visited nodes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2D Array Board AI    </td>
+<td>7    </td>
+<td>1.250252  </td>
+<td>6634026      </td>
+</tr>
+<tr>
+<td>2D Array Board AI    </td>
+<td>8    </td>
+<td>4.637645  </td>
+<td>46028598      </td>
+</tr>
+<tr>
+<td>2D Array Board AI    </td>
+<td>9    </td>
+<td>32.516463</td>
+<td>314060244    </td>
+</tr>
+</tbody>
+</table>
+<p>Wow, that is still pretty fast. However, I think we can do better.</p>
+<p>The main bottleneck on speed is the sheer number of loops. We could cut it to O(n) by using bitboards and bitwise operations to evaluate states. However, I was not very confident with using a full bitboard, so I was recommended to use a &ldquo;pseudo-bitboard&rdquo; that still heavily relies on bitwise operations. I would keep each column as an 8-bit integer, and I would ignore the first two rows as the height is only 6</p>
+<p>I mainly used <a href="https://github.com/denkspuren/BitboardC4/blob/master/BitboardDesign.md">this resource</a> for the bitboard implementations, I translated my original design into a &ldquo;pseudo-bitboard&rdquo; AI in <a href="https://github.com/joshuaspiral/c4c/blob/main/ai_bitboard.c">ai_bitboard.c</a>. I ran benchmarks again and this time, it was very surprising.</p>
+<table>
+<thead>
+<tr>
+<th>Implementation        </th>
+<th>Depth</th>
+<th>Time (s)  </th>
+<th>Visited nodes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2D Array Board AI    </td>
+<td>7    </td>
+<td>1.250252  </td>
+<td>6634026      </td>
+</tr>
+<tr>
+<td>&ldquo;Pseudo-bitboard&rdquo; AI  </td>
+<td>7    </td>
+<td>0.171348  </td>
+<td>6602778      </td>
+</tr>
+<tr>
+<td>2D Array Board AI    </td>
+<td>8    </td>
+<td>4.637645  </td>
+<td>46028598      </td>
+</tr>
+<tr>
+<td>&ldquo;Pseudo-bitboard&rdquo; AI  </td>
+<td>8    </td>
+<td>1.180703  </td>
+<td>45414144      </td>
+</tr>
+<tr>
+<td>2D Array Board AI    </td>
+<td>9    </td>
+<td>32.516463</td>
+<td>314060244    </td>
+</tr>
+<tr>
+<td>&ldquo;Pseudo-bitboard&rdquo; AI  </td>
+<td>9    </td>
+<td>1.250252  </td>
+<td>6634026      </td>
+</tr>
+</tbody>
+</table>
+<p>(I actually do not know why the visited nodes are slightly different each time. There may be a difference in the heuristics)</p>
+<h2 id="real-bitboard">Real bitboard</h2>
+<p>After conquering the challenge of building a &ldquo;pseudo-bitboard&rdquo;, I felt ready to write the code for a real bitboard. I spent a while drawing the board out on paper and trying a few bitwise operations to aid the functionality of the dropPiece(), popPiece(), evaluateBoard() functions. I ended up finishing all the code in a little under 1 hour because of my previous experience with the &ldquo;pseudo-bitboard&rdquo;. The code is in <a href="https://github.com/joshuaspiral/c4c/blob/main/ai_realbitboard.c">ai_realbitboard.c</a> (I know, not a very good name).</p>
+<table>
+<thead>
+<tr>
+<th>Implementation        </th>
+<th>Depth</th>
+<th>Time (s)  </th>
+<th>Visited nodes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2D Array Board AI    </td>
+<td>7    </td>
+<td>1.250252  </td>
+<td>6634026       </td>
+</tr>
+<tr>
+<td>&ldquo;Pseudo-bitboard&rdquo; AI  </td>
+<td>7    </td>
+<td>0.171348  </td>
+<td>6602778       </td>
+</tr>
+<tr>
+<td>Bitboard AI  </td>
+<td>7    </td>
+<td>0.051276  </td>
+<td>6601433      </td>
+</tr>
+<tr>
+<td>2D Array Board AI    </td>
+<td>8    </td>
+<td>4.637645  </td>
+<td>46028598       </td>
+</tr>
+<tr>
+<td>&ldquo;Pseudo-bitboard&rdquo; AI  </td>
+<td>8    </td>
+<td>1.180703  </td>
+<td>45414144      </td>
+</tr>
+<tr>
+<td>Bitboard AI  </td>
+<td>8    </td>
+<td>0.384628  </td>
+<td>45386033      </td>
+</tr>
+<tr>
+<td>2D Array Board AI    </td>
+<td>9    </td>
+<td>32.516463</td>
+<td>314060244    </td>
+</tr>
+<tr>
+<td>&ldquo;Pseudo-bitboard&rdquo; AI  </td>
+<td>9    </td>
+<td>8.299119  </td>
+<td>310985082    </td>
+</tr>
+<tr>
+<td>Bitboard AI    </td>
+<td>9    </td>
+<td>2.373259  </td>
+<td>310528499    </td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://github.com/joshuaspiral/c4c/blob/main/ai_realbitboard.c">Implementation</a></p>
+<p>Maybe this is where I stop&hellip;</p>
+<h2 id="next-steps">Next steps</h2>
+<ul>
+<li>Transposition table</li>
+<li>Move ordering</li>
+<li>Heuristic optimisations</li>
+</ul>
+<hr>
+<p>Things in this article may be very wrong, and I do not know a lot about this topic. If there are any mistakes, please do not hesitate to correct me.</p>
+
+    </div>
+    <footer class="content__footer"></footer>
+
+            </section>
+
+            <section class="page__aside">
+                <div class="aside__about">
+<div class="aside__about">
+    <img class="about__logo" src="https://joshuaspiral.xyz/images/rice.svg" alt="Logo">
+<h1 class="about__title">joshuaspiral.xyz</h1>
+<p class="about__description">My personal site</p>
+</div>
+
+
+<ul class="aside__social-links">
+    
+    <li>
+        <a href="https://github.com/joshuaspiral/" rel="me" aria-label="GitHub" title="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>&nbsp;
+    </li>
+    
+</ul>
+</div>
+                <hr>
+                <div class="aside__content">
+    <p>A devlog on creating a connect four AI</p>
+    
+        <p>
+            By Joshua, 
+            2022-03-30
+        </p>
+    
+
+                </div>
+            </section>
+
+            <footer class="page__footer"><p class="copyright">© 2022 joshuaspiral</p>
+<p class="advertisement">Powered by <a href="https://gohugo.io/">hugo</a> and <a href="https://github.com/joeroe/risotto">risotto</a>.</p>
+</footer>
+
+        </div>
+    </body>
+
+</html>

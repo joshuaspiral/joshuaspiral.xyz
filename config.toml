@@ -1,0 +1,43 @@
+baseURL = "https://joshuaspiral.xyz/"
+theme = "risotto"
+title = "joshuaspiral.xyz"
+author = "joshuaspiral"
+copyright = "© 2022 joshuaspiral"
+paginate = 3
+languageCode = "en"
+DefaultContentLanguage = "en"
+enableInlineShortcodes = true
+ignoreErrors = ["error-remote-getjson"]
+
+# Automatically add content sections to main menu
+sectionPagesMenu = "main"
+
+[params]
+
+[params.theme]
+palette = "gruvbox-dark"
+mode = "dark-mode"
+ 
+[params.about]
+title = "joshuaspiral.xyz"
+description = "My personal site"
+logo = "images/rice.svg"
+
+[[params.socialLinks]]
+icon = "fab fa-github"
+title = "GitHub"
+url = "https://github.com/joshuaspiral/"
+
+[menu]
+
+  [[menu.main]]
+    identifier = "about"
+    name = "about"
+    url = "/about/"
+    weight = 1
+
+  [[menu.main]]
+    identifier = "posts"
+    name = "posts"
+    url = "/posts/"
+    weight = 2
