@@ -12,4 +12,3 @@ This site was created to share my content across the internet. I write about top
 - Linux and minimalist operating systems
 - Programming (C/C++, Python)
 - Language learning
-- Philosophy
