@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Series on joshuaspiral.xyz</title>
+    <link>http://joshuaspiral.xyz/series/</link>
+    <description>Recent content in Series on joshuaspiral.xyz</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>© 2022 joshuaspiral</copyright><atom:link href="http://joshuaspiral.xyz/series/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>

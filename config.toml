@@ -20,7 +20,8 @@ mode = "dark-mode"
 
 [params.about]
 title = "joshuaspiral.xyz"
-description = "My personal site"
+description = "joshuaspiral's website"
+logo = "images/chip.svg"
 
 [[params.socialLinks]]
 icon = "fab fa-github"

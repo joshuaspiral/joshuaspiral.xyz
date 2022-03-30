@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head><title>Making a Connect Four Ai &ndash; joshuaspiral.xyz</title>
-<meta name="description" content="My personal site">
+    <head><title>Making a Connect Four AI &ndash; joshuaspiral.xyz</title>
+<meta name="description" content="joshuaspiral&#39;s website">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8"/>
@@ -14,16 +14,16 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.1/css/academicons.min.css" integrity="sha512-b1ASx0WHgVFL5ZQhTgiPWX+68KjS38Jk87jg7pe+qC7q9YkEtFq0z7xCglv7qGIs/68d3mAp+StfC8WKC5SSAg==" crossorigin="anonymous" />
 
 
-<link rel="stylesheet" href="https://joshuaspiral.xyz/css/colour/gruvbox-dark.css">
-<link rel="stylesheet" href="https://joshuaspiral.xyz/css/colour/dark-mode.css">
-<link rel="stylesheet" href="https://joshuaspiral.xyz/css/risotto.css">
-<link rel="stylesheet" href="https://joshuaspiral.xyz/css/custom.css">
+<link rel="stylesheet" href="http://joshuaspiral.xyz/css/colour/gruvbox-dark.css">
+<link rel="stylesheet" href="http://joshuaspiral.xyz/css/colour/dark-mode.css">
+<link rel="stylesheet" href="http://joshuaspiral.xyz/css/risotto.css">
+<link rel="stylesheet" href="http://joshuaspiral.xyz/css/custom.css">
 </head>
 
     <body>
         <div class="page">
 
-            <header class="page__header"><h1 class="page__logo"><a href="https://joshuaspiral.xyz/" class="page__logo-inner">joshuaspiral.xyz</a></h1>
+            <header class="page__header"><h1 class="page__logo"><a href="http://joshuaspiral.xyz/" class="page__logo-inner">joshuaspiral.xyz</a></h1>
 <nav class="page__nav main-nav">
     <ul>
     
@@ -39,11 +39,13 @@
 
             <section class="page__body">
     <header class="content__header">
-        <h1>Making a Connect Four Ai</h1>
+        <h1>Making a Connect Four AI</h1>
     </header>
     <div class="content__body">
-        <h2 id="introduction">Introduction</h2>
-<p>I was tasked with creating a 2D array game for my computer science course, and I first went with Tic Tac Toe. Soon after, I wrote an AI for it using the <a href="https://en.wikipedia.org/wiki/Minimax">minimax</a>. I wrote them in Python because it was nice and easy. However, I wanted speed, so I wrote my first proper C program, <a href="https://github.com/joshuaspiral/tictacc">TicTacC</a>. After having written the AI, I had to create an AI for either <a href="https://en.wikipedia.org/wiki/Connect_Four">Connect Four</a>, <a href="https://en.wikipedia.org/wiki/Reversi">Othello/Reversi</a> or the sliding game <a href="https://en.wikipedia.org/wiki/15_puzzle">15</a>. I picked Connect Four because I had the most experience with the game. I quickly wrote a prototype of the basic game logic in Python, <a href="https://github.com/joshuaspiral/connectfourpy">here is the repo</a>. I became obsessed with creating a better and faster AI, so I went back to C. Here, I document my journey in creating a fast and smart Connect Four AI.</p>
+        <h2 id="disclaimer">DISCLAIMER</h2>
+<p>Things in this article may be incorrect, and I do not know a lot about this topic. If there are any mistakes, please do not hesitate to correct me.</p>
+<h2 id="introduction">Introduction</h2>
+<p>I was tasked with creating a 2D array game for my computer science course, and I went with Tic Tac Toe. Soon after, I wrote an AI for it using the <a href="https://en.wikipedia.org/wiki/Minimax">minimax</a> algorithm. I wrote it in Python because it was quick to put together. However, I wanted speed, so I wrote a C program, <a href="https://github.com/joshuaspiral/tictacc">TicTacC</a>. After having written the AI, I had to create an AI for either <a href="https://en.wikipedia.org/wiki/Connect_Four">Connect Four</a>, <a href="https://en.wikipedia.org/wiki/Reversi">Othello/Reversi</a>, or the sliding game <a href="https://en.wikipedia.org/wiki/15_puzzle">15</a>. I picked Connect Four because I had the most experience with the game. I wrote a prototype of the basic game logic in Python, <a href="https://github.com/joshuaspiral/connectfourpy">here is the repo</a> then rewrote it in C. In this devlog, I document my journey in creating a faster and smarter Connect Four AI with several layers of optimisations.</p>
 <h2 id="what-is-connect-four">What is Connect Four?</h2>
 <p>Connect Four, or otherwise known as Four in a Row, is a two player board game where there is a 6x7 vertical grid, where players take turns dropping pieces down columns. To win, a player must connect four pieces of their color together, either vertically, horizontally, or diagonally.</p>
 <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Connect_Four.gif/220px-Connect_Four.gif" alt="Gameplay of Connect Four - Wikipedia"></p>
@@ -85,7 +87,10 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>            <span style="color:#75715e">/* Primary diagonal check (/) */</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (board[i][j] <span style="color:#f92672">==</span> board[i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>][j <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">&amp;&amp;</span> board [i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>][j <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> board[i <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>][j <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>] <span style="color:#f92672">&amp;&amp;</span> board[i <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>][j <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>] <span style="color:#f92672">==</span> board[i <span style="color:#f92672">+</span> <span style="color:#ae81ff">3</span>][j <span style="color:#f92672">+</span> <span style="color:#ae81ff">3</span>] <span style="color:#f92672">&amp;&amp;</span> board[i][j] <span style="color:#f92672">!=</span> UNCLAIMED) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (board[i][j] <span style="color:#f92672">==</span> board[i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>][j <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">&amp;&amp;</span> 
+</span></span><span style="display:flex;"><span>                board [i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>][j <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> board[i <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>][j <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>] <span style="color:#f92672">&amp;&amp;</span> 
+</span></span><span style="display:flex;"><span>                board[i <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>][j <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>] <span style="color:#f92672">==</span> board[i <span style="color:#f92672">+</span> <span style="color:#ae81ff">3</span>][j <span style="color:#f92672">+</span> <span style="color:#ae81ff">3</span>] <span style="color:#f92672">&amp;&amp;</span> 
+</span></span><span style="display:flex;"><span>                board[i][j] <span style="color:#f92672">!=</span> UNCLAIMED) {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (board[i][j] <span style="color:#f92672">==</span> piece) {
 </span></span><span style="display:flex;"><span>
@@ -105,13 +110,13 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// Extract from evaluateBoard() function in c4c.
-</span></span></span></code></pre></div><p>This is not a very elegant solution as it is O(n^2 * 5) (horizontal, vertical, primary diagonal, secondary diagonal, and checking for draws). However, there are better ways to do this and I will soon get into them.</p>
+</span></span><span style="display:flex;"><span>c4c <span style="color:#f92672">&gt;</span> ai.c <span style="color:#f92672">&gt;</span> evaluateBoard()
+</span></span></code></pre></div><p>This is not a very elegant solution as has a time complexity of <code>O(n^2 * 5)</code> (horizontal, vertical, primary diagonal, secondary diagonal, and checking for draws). However, without much research, you can find out better ways to check for a win that are constant time!</p>
 <h2 id="the-minimax-algorithm">The minimax algorithm</h2>
-<p>The <a href="https://en.wikipedia.org/wiki/Minimax">minimax algorithm</a> is the most popular decision rule algorithm for games like Tic Tac Toe, Connect Four, and Chess where there are two players taking alternate moves. I wouldn&rsquo;t be able to explain it any better than a YouTube video, so I would recommend <a href="https://www.youtube.com/watch?v=l-hh51ncgDI">this one</a> by Sebastian Lague.  </p>
-<p>The algorithm prioritises certain permutations, set by your evaluation function and heuristic scoring. The depth passed into the algorithm controls how many moves ahead it should search for. The algorithm minimises its losses by picking the moves that would result in an advantage for the AI. There are optimisations for the algorithm, such as alpha-beta pruning which prunes tres that are pointless to evaluate, and move ordering, which is an extension to alpha-beta pruning to sort the moves so there is a higher chance of pruning. </p>
+<p>The <a href="https://en.wikipedia.org/wiki/Minimax">minimax algorithm</a> is one of the most popular decision rule algorithm for games like Tic Tac Toe, Connect Four, and Chess where there are two players taking alternate moves. I wouldn&rsquo;t be able to explain it any better than a YouTube video, so I would recommend <a href="https://www.youtube.com/watch?v=l-hh51ncgDI">this one</a> by Sebastian Lague.  </p>
+<p>The algorithm prioritises certain permutations, set by your evaluation function and heuristic scoring function. The depth passed into the algorithm dictates how many moves ahead the algorithm should check. The algorithm minimises its losses by picking the moves that would result in an advantage for the AI, if there is a winning scenario, it picks that as its choice. There are many optimisations for the algorithm, such as alpha-beta pruning which prunes trees that are pointless to evaluate, and move ordering, which is an extension to alpha-beta pruning to sort the moves so there is a higher chance of pruning. </p>
 <h2 id="bitboards">Bitboards</h2>
-<p>Another optimisation for the minimax algorithm is using <a href="https://en.wikipedia.org/wiki/Bitboard">bitboards</a>. Bitboards are binary representations of a board for a specific piece. For example, a Tic Tac Toe grid could look like this:</p>
+<p>Another optimisation for the minimax algorithm (very common in chess) is by using <a href="https://en.wikipedia.org/wiki/Bitboard">bitboards</a>. Bitboards are binary representations of a board for a specific piece. For example, a Tic Tac Toe grid could look like this:</p>
 <pre tabindex="0"><code>------------
 | X | O | X |
 ------------
@@ -123,20 +128,20 @@
 <pre tabindex="0"><code>
 X bitboard:
 
-1_0_1_
+101_
 
-0_1_1_
+011_
 
-0_0_0
+000
 
 O bitboard:
 
-0_1_0_
+010_
 
-0_0_0_
+000_
 
-1_1_0
-</code></pre><p>These two, of course, would be a little over a byte, so you would use a type like <code>uint16_t</code> to store them as <code>uint16_t X = 0b000000_0101_011_000</code> and <code>uint16_t O = 0b000000_010_000_110</code> (starting 6 bits are just to fill the empty space). Instead of a mess of for loops, you can have unreadable bitwise logic to evaluate the board. For example, to evaluate whether or not a board has 3 in a row horizontally, you can bit shift it by certain offsets, for example:</p>
+110
+</code></pre><p>These two, of course, would be a little over a byte, so you would use a type like <code>uint16_t</code> to store them. This could look like <code>uint16_t X = 0b0000000_101_011_000</code> and <code>uint16_t O = 0b0000000_010_000_110</code> (starting 7 bits are just to fill the empty space). Instead of a mess of for loops, you can have unreadable bitwise logic to evaluate the board. We can evaluate whether or not a board has 3 in a row horizontally by bitshifting certain offsets due to the nature of the bitboard:</p>
 <pre tabindex="0"><code>
   0b000000_010_000_111
 
@@ -154,7 +159,7 @@ __________________________________________________
 3 4 5
 
 6 7 8
-</code></pre><p>This grid can help with figuring out the &ldquo;magic&rdquo; numbers.</p>
+</code></pre><p>This grid can help with figuring out the &ldquo;magic&rdquo; numbers to shift by.</p>
 <h2 id="1d-array-bitboard">1D array bitboard</h2>
 <p>Before we optimise, let&rsquo;s take a look at the current benchmarks:</p>
 <table>
@@ -189,7 +194,7 @@ __________________________________________________
 </table>
 <p>Wow, that is still pretty fast. However, I think we can do better.</p>
 <p>The main bottleneck on speed is the sheer number of loops. We could cut it to O(n) by using bitboards and bitwise operations to evaluate states. However, I was not very confident with using a full bitboard, so I was recommended to use a &ldquo;pseudo-bitboard&rdquo; that still heavily relies on bitwise operations. I would keep each column as an 8-bit integer, and I would ignore the first two rows as the height is only 6</p>
-<p>I mainly used <a href="https://github.com/denkspuren/BitboardC4/blob/master/BitboardDesign.md">this resource</a> for the bitboard implementations, I translated my original design into a &ldquo;pseudo-bitboard&rdquo; AI in <a href="https://github.com/joshuaspiral/c4c/blob/main/ai_bitboard.c">ai_bitboard.c</a>. I ran benchmarks again and this time, it was very surprising.</p>
+<p>I mainly used <a href="https://github.com/denkspuren/BitboardC4/blob/master/BitboardDesign.md">this resource</a> for the bitboard implementations, I translated my original design into a &ldquo;pseudo-bitboard&rdquo; AI in <a href="https://github.com/joshuaspiral/c4c/blob/main/archives/ai_bitboard.c">ai_bitboard.c</a>. I ran benchmarks again and this time, it was very surprising.</p>
 <table>
 <thead>
 <tr>
@@ -240,7 +245,7 @@ __________________________________________________
 </table>
 <p>(I actually do not know why the visited nodes are slightly different each time. There may be a difference in the heuristics)</p>
 <h2 id="real-bitboard">Real bitboard</h2>
-<p>After conquering the challenge of building a &ldquo;pseudo-bitboard&rdquo;, I felt ready to write the code for a real bitboard. I spent a while drawing the board out on paper and trying a few bitwise operations to aid the functionality of the dropPiece(), popPiece(), evaluateBoard() functions. I ended up finishing all the code in a little under 1 hour because of my previous experience with the &ldquo;pseudo-bitboard&rdquo;. The code is in <a href="https://github.com/joshuaspiral/c4c/blob/main/ai_realbitboard.c">ai_realbitboard.c</a> (I know, not a very good name).</p>
+<p>After conquering the challenge of building a &ldquo;pseudo-bitboard&rdquo;, I felt ready to write the code for a real bitboard. I spent a while drawing the board out on paper and trying a few bitwise operations to aid the functionality of the dropPiece(), popPiece(), evaluateBoard() functions. I ended up finishing all the code in a little under 1 hour because of my previous experience with the &ldquo;pseudo-bitboard&rdquo;. The code is in <a href="https://github.com/joshuaspiral/c4c/blob/main/archives/ai_realbitboard.c">ai_realbitboard.c</a> (I know, not a very good name).</p>
 <table>
 <thead>
 <tr>
@@ -307,16 +312,20 @@ __________________________________________________
 </tr>
 </tbody>
 </table>
-<p><a href="https://github.com/joshuaspiral/c4c/blob/main/ai_realbitboard.c">Implementation</a></p>
-<p>Maybe this is where I stop&hellip;</p>
-<h2 id="next-steps">Next steps</h2>
+<p><a href="https://github.com/joshuaspiral/c4c/blob/main/archives/ai_realbitboard.c">Implementation</a></p>
+<h2 id="closing-comments">Closing comments</h2>
+<p>Since this is quite <em>overoptimised</em> for a mere Connect Four AI, maybe this is where I should stop. However, there are some extra things you could try to optimise.</p>
 <ul>
-<li>Transposition table</li>
-<li>Move ordering</li>
-<li>Heuristic optimisations</li>
+<li>Transposition table - this caches all board positions, enabling you to skip evaluating already visited permutations (this actually didn&rsquo;t work so well for my implementation as the evaluation function was faster than inserting new grid entries but I could have overcome the problem through preallocating the memory)</li>
+<li>Move ordering - more efficiently ordering the evaluation, pruning more branches in the game tree</li>
+<li>Heuristic optimisations - creating smarter moves for the AI to prioritise</li>
 </ul>
-<hr>
-<p>Things in this article may be very wrong, and I do not know a lot about this topic. If there are any mistakes, please do not hesitate to correct me.</p>
+<h2 id="very-useful-information-when-writing-this-program">Very useful information when writing this program</h2>
+<p>When researching this topic, I found two very useful articles about Connect Four AIs and bitboards. They are listed below:</p>
+<ul>
+<li><a href="https://blog.gamesolver.org/solving-connect-four/01-introduction/">Pascal Pons&rsquo; 11 part series on creating a Connect Four AI</a></li>
+<li><a href="https://github.com/denkspuren/BitboardC4/blob/master/BitboardDesign.md">A guide on bitboards implemented for Connect Four</a></li>
+</ul>
 
     </div>
     <footer class="content__footer"></footer>
@@ -326,9 +335,9 @@ __________________________________________________
             <section class="page__aside">
                 <div class="aside__about">
 <div class="aside__about">
-    <img class="about__logo" src="https://joshuaspiral.xyz/images/rice.svg" alt="Logo">
+    <img class="about__logo" src="http://joshuaspiral.xyz/images/chip.svg" alt="Logo">
 <h1 class="about__title">joshuaspiral.xyz</h1>
-<p class="about__description">My personal site</p>
+<p class="about__description">joshuaspiral&rsquo;s website</p>
 </div>
 
 
@@ -354,7 +363,6 @@ __________________________________________________
             </section>
 
             <footer class="page__footer"><p class="copyright">© 2022 joshuaspiral</p>
-<p class="advertisement">Powered by <a href="https://gohugo.io/">hugo</a> and <a href="https://github.com/joeroe/risotto">risotto</a>.</p>
 </footer>
 
         </div>
