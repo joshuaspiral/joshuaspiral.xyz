@@ -43,14 +43,14 @@
     </header>
     <div class="content__body">
         <h2 id="disclaimer">DISCLAIMER</h2>
-<p>Things in this article may be incorrect, and I do not know a lot about this topic. If there are any mistakes, please do not hesitate to correct me.</p>
+<p>Things in this article may be <strong>incorrect</strong>, and I do not know a lot about this topic. If there are any mistakes, please do not hesitate to correct me.</p>
 <h2 id="introduction">Introduction</h2>
 <p>I was tasked with creating a 2D array game for my computer science course, and I went with Tic Tac Toe. Soon after, I wrote an AI for it using the <a href="https://en.wikipedia.org/wiki/Minimax">minimax</a> algorithm. I wrote it in Python because it was quick to put together. However, I wanted speed, so I wrote a C program, <a href="https://github.com/joshuaspiral/tictacc">TicTacC</a>. After having written the AI, I had to create an AI for either <a href="https://en.wikipedia.org/wiki/Connect_Four">Connect Four</a>, <a href="https://en.wikipedia.org/wiki/Reversi">Othello/Reversi</a>, or the sliding game <a href="https://en.wikipedia.org/wiki/15_puzzle">15</a>. I picked Connect Four because I had the most experience with the game. I wrote a prototype of the basic game logic in Python, <a href="https://github.com/joshuaspiral/connectfourpy">here is the repo</a> then rewrote it in C. In this devlog, I document my journey in creating a faster and smarter Connect Four AI with several layers of optimisations.</p>
 <h2 id="what-is-connect-four">What is Connect Four?</h2>
 <p>Connect Four, or otherwise known as Four in a Row, is a two player board game where there is a 6x7 vertical grid, where players take turns dropping pieces down columns. To win, a player must connect four pieces of their color together, either vertically, horizontally, or diagonally.</p>
 <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Connect_Four.gif/220px-Connect_Four.gif" alt="Gameplay of Connect Four - Wikipedia"></p>
 <h2 id="checking-for-a-win">Checking for a win</h2>
-<p>My original game would store the board as a 2D character array, with each cell either holding an UNCLAIMED, YELLOW or RED enum variant.</p>
+<p>My original game would store the board as a 2D character array, with each cell either holding an <code>UNCLAIMED</code>, <code>YELLOW</code> or <code>RED</code> enum variant.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">enum</span> State {
 </span></span><span style="display:flex;"><span>
@@ -143,11 +143,11 @@ O bitboard:
 110
 </code></pre><p>These two, of course, would be a little over a byte, so you would use a type like <code>uint16_t</code> to store them. This could look like <code>uint16_t X = 0b0000000_101_011_000</code> and <code>uint16_t O = 0b0000000_010_000_110</code> (starting 7 bits are just to fill the empty space). Instead of a mess of for loops, you can have unreadable bitwise logic to evaluate the board. We can evaluate whether or not a board has 3 in a row horizontally by bitshifting certain offsets due to the nature of the bitboard:</p>
 <pre tabindex="0"><code>
-  0b000000_010_000_111
+  0b0000000_010_000_111
 
-  0b000000_010_000_111 &gt;&gt; 1 = 0b000000_001_000_011
+  0b0000000_010_000_111 &gt;&gt; 1 = 0b0000000_001_000_011
 
-&amp; 0b000000_010_000_111 &gt;&gt; 2 = 0b000000_000_100_001
+&amp; 0b0000000_010_000_111 &gt;&gt; 2 = 0b0000000_000_100_001
 __________________________________________________
 
   0b0
@@ -243,7 +243,7 @@ __________________________________________________
 </tr>
 </tbody>
 </table>
-<p>(I actually do not know why the visited nodes are slightly different each time. There may be a difference in the heuristics)</p>
+<p>(I actually do not know why the visited nodes are slightly different each time. There may be a slight difference in the heuristic functions.)</p>
 <h2 id="real-bitboard">Real bitboard</h2>
 <p>After conquering the challenge of building a &ldquo;pseudo-bitboard&rdquo;, I felt ready to write the code for a real bitboard. I spent a while drawing the board out on paper and trying a few bitwise operations to aid the functionality of the dropPiece(), popPiece(), evaluateBoard() functions. I ended up finishing all the code in a little under 1 hour because of my previous experience with the &ldquo;pseudo-bitboard&rdquo;. The code is in <a href="https://github.com/joshuaspiral/c4c/blob/main/archives/ai_realbitboard.c">ai_realbitboard.c</a> (I know, not a very good name).</p>
 <table>
@@ -316,14 +316,14 @@ __________________________________________________
 <h2 id="closing-comments">Closing comments</h2>
 <p>Since this is quite <em>overoptimised</em> for a mere Connect Four AI, maybe this is where I should stop. However, there are some extra things you could try to optimise.</p>
 <ul>
-<li>Transposition table - this caches all board positions, enabling you to skip evaluating already visited permutations (this actually didn&rsquo;t work so well for my implementation as the evaluation function was faster than inserting new grid entries but I could have overcome the problem through preallocating the memory)</li>
+<li>Transposition table - this caches all board positions, enabling you to skip evaluating already visited permutations (this actually didn&rsquo;t work so well for my implementation as the evaluation function was faster than inserting new grid entries, but, I could have overcome this problem through preallocating the memory for the hashtable)</li>
 <li>Move ordering - more efficiently ordering the evaluation, pruning more branches in the game tree</li>
 <li>Heuristic optimisations - creating smarter moves for the AI to prioritise</li>
 </ul>
 <h2 id="very-useful-information-when-writing-this-program">Very useful information when writing this program</h2>
 <p>When researching this topic, I found two very useful articles about Connect Four AIs and bitboards. They are listed below:</p>
 <ul>
-<li><a href="https://blog.gamesolver.org/solving-connect-four/01-introduction/">Pascal Pons&rsquo; 11 part series on creating a Connect Four AI</a></li>
+<li><a href="https://blog.gamesolver.org/solving-connect-four/01-introduction/">Pascal Pons&rsquo; 12 part series on creating a Connect Four AI</a></li>
 <li><a href="https://github.com/denkspuren/BitboardC4/blob/master/BitboardDesign.md">A guide on bitboards implemented for Connect Four</a></li>
 </ul>
 
@@ -363,7 +363,6 @@ __________________________________________________
             </section>
 
             <footer class="page__footer"><p class="copyright">© 2022 joshuaspiral</p>
-<p class="advertisement">Powered by <a href="https://gohugo.io/">hugo</a> and <a href="https://github.com/joeroe/risotto">risotto</a>.</p>
 </footer>
 
         </div>

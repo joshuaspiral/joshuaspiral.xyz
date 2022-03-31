@@ -8,7 +8,7 @@ category: Devlog
 draft: false
 ---
 ## DISCLAIMER
-Things in this article may be incorrect, and I do not know a lot about this topic. If there are any mistakes, please do not hesitate to correct me.
+Things in this article may be **incorrect**, and I do not know a lot about this topic. If there are any mistakes, please do not hesitate to correct me.
 
 ## Introduction
 
@@ -23,7 +23,7 @@ Connect Four, or otherwise known as Four in a Row, is a two player board game wh
 
 ## Checking for a win
 
-My original game would store the board as a 2D character array, with each cell either holding an UNCLAIMED, YELLOW or RED enum variant.
+My original game would store the board as a 2D character array, with each cell either holding an `UNCLAIMED`, `YELLOW` or `RED` enum variant.
 
 ```c
 
@@ -143,11 +143,11 @@ These two, of course, would be a little over a byte, so you would use a type lik
 
 ```
 
-  0b000000_010_000_111
+  0b0000000_010_000_111
 
-  0b000000_010_000_111 >> 1 = 0b000000_001_000_011
+  0b0000000_010_000_111 >> 1 = 0b0000000_001_000_011
 
-& 0b000000_010_000_111 >> 2 = 0b000000_000_100_001
+& 0b0000000_010_000_111 >> 2 = 0b0000000_000_100_001
 __________________________________________________
 
   0b0
@@ -195,7 +195,7 @@ I mainly used [this resource](https://github.com/denkspuren/BitboardC4/blob/mast
 | 2D Array Board AI     | 9     | 32.516463 | 314060244     |
 | "Pseudo-bitboard" AI  | 9     | 1.250252  | 6634026       |
 
-(I actually do not know why the visited nodes are slightly different each time. There may be a difference in the heuristics)
+(I actually do not know why the visited nodes are slightly different each time. There may be a slight difference in the heuristic functions.)
 
 ## Real bitboard
 
@@ -217,11 +217,11 @@ After conquering the challenge of building a "pseudo-bitboard", I felt ready to 
 
 ## Closing comments
 Since this is quite *overoptimised* for a mere Connect Four AI, maybe this is where I should stop. However, there are some extra things you could try to optimise.
-- Transposition table - this caches all board positions, enabling you to skip evaluating already visited permutations (this actually didn't work so well for my implementation as the evaluation function was faster than inserting new grid entries but I could have overcome the problem through preallocating the memory)
+- Transposition table - this caches all board positions, enabling you to skip evaluating already visited permutations (this actually didn't work so well for my implementation as the evaluation function was faster than inserting new grid entries, but, I could have overcome this problem through preallocating the memory for the hashtable)
 - Move ordering - more efficiently ordering the evaluation, pruning more branches in the game tree
 - Heuristic optimisations - creating smarter moves for the AI to prioritise
 
 ## Very useful information when writing this program
 When researching this topic, I found two very useful articles about Connect Four AIs and bitboards. They are listed below:
-- [Pascal Pons' 11 part series on creating a Connect Four AI](https://blog.gamesolver.org/solving-connect-four/01-introduction/)
+- [Pascal Pons' 12 part series on creating a Connect Four AI](https://blog.gamesolver.org/solving-connect-four/01-introduction/)
 - [A guide on bitboards implemented for Connect Four](https://github.com/denkspuren/BitboardC4/blob/master/BitboardDesign.md)
