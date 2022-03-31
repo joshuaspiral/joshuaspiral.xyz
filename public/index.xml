@@ -2,28 +2,28 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>joshuaspiral.xyz</title>
-    <link>http://joshuaspiral.xyz/</link>
+    <link>https://joshuaspiral.xyz/</link>
     <description>Recent content on joshuaspiral.xyz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>© 2022 joshuaspiral</copyright>
-    <lastBuildDate>Wed, 30 Mar 2022 11:45:01 +0800</lastBuildDate><atom:link href="http://joshuaspiral.xyz/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 30 Mar 2022 11:45:01 +0800</lastBuildDate><atom:link href="https://joshuaspiral.xyz/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Making a Connect Four AI</title>
-      <link>http://joshuaspiral.xyz/posts/making-a-connect-four-ai/</link>
+      <link>https://joshuaspiral.xyz/posts/making-a-connect-four-ai/</link>
       <pubDate>Wed, 30 Mar 2022 11:45:01 +0800</pubDate>
       
-      <guid>http://joshuaspiral.xyz/posts/making-a-connect-four-ai/</guid>
+      <guid>https://joshuaspiral.xyz/posts/making-a-connect-four-ai/</guid>
       <description>DISCLAIMER Things in this article may be incorrect, and I do not know a lot about this topic. If there are any mistakes, please do not hesitate to correct me.
 Introduction I was tasked with creating a 2D array game for my computer science course, and I went with Tic Tac Toe. Soon after, I wrote an AI for it using the minimax algorithm. I wrote it in Python because it was quick to put together.</description>
     </item>
     
     <item>
       <title>About me</title>
-      <link>http://joshuaspiral.xyz/about/</link>
+      <link>https://joshuaspiral.xyz/about/</link>
       <pubDate>Wed, 30 Mar 2022 11:38:05 +0800</pubDate>
       
-      <guid>http://joshuaspiral.xyz/about/</guid>
+      <guid>https://joshuaspiral.xyz/about/</guid>
       <description>What is this site? This site was created to share my content across the internet. I write about topics that interest me, or things that I want to share. I am a GNU/Linux user. I also have another website at toxicfs.xyz.
 Software I use My current setup is Artix Linux with dwm and dwmblocks, by suckless, running on X. Here are my dotfiles (note that they are very CUSTOMISED for me, do not blindly copy the configs).</description>
     </item>

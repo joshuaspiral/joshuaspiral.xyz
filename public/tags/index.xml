@@ -2,45 +2,45 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on joshuaspiral.xyz</title>
-    <link>http://joshuaspiral.xyz/tags/</link>
+    <link>https://joshuaspiral.xyz/tags/</link>
     <description>Recent content in Tags on joshuaspiral.xyz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>© 2022 joshuaspiral</copyright>
-    <lastBuildDate>Wed, 30 Mar 2022 11:45:01 +0800</lastBuildDate><atom:link href="http://joshuaspiral.xyz/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 30 Mar 2022 11:45:01 +0800</lastBuildDate><atom:link href="https://joshuaspiral.xyz/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>ai</title>
-      <link>http://joshuaspiral.xyz/tags/ai/</link>
+      <link>https://joshuaspiral.xyz/tags/ai/</link>
       <pubDate>Wed, 30 Mar 2022 11:45:01 +0800</pubDate>
       
-      <guid>http://joshuaspiral.xyz/tags/ai/</guid>
+      <guid>https://joshuaspiral.xyz/tags/ai/</guid>
       <description></description>
     </item>
     
     <item>
       <title>c</title>
-      <link>http://joshuaspiral.xyz/tags/c/</link>
+      <link>https://joshuaspiral.xyz/tags/c/</link>
       <pubDate>Wed, 30 Mar 2022 11:45:01 +0800</pubDate>
       
-      <guid>http://joshuaspiral.xyz/tags/c/</guid>
+      <guid>https://joshuaspiral.xyz/tags/c/</guid>
       <description></description>
     </item>
     
     <item>
       <title>programming</title>
-      <link>http://joshuaspiral.xyz/tags/programming/</link>
+      <link>https://joshuaspiral.xyz/tags/programming/</link>
       <pubDate>Wed, 30 Mar 2022 11:45:01 +0800</pubDate>
       
-      <guid>http://joshuaspiral.xyz/tags/programming/</guid>
+      <guid>https://joshuaspiral.xyz/tags/programming/</guid>
       <description></description>
     </item>
     
     <item>
       <title>index</title>
-      <link>http://joshuaspiral.xyz/tags/index/</link>
+      <link>https://joshuaspiral.xyz/tags/index/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://joshuaspiral.xyz/tags/index/</guid>
+      <guid>https://joshuaspiral.xyz/tags/index/</guid>
       <description></description>
     </item>
     

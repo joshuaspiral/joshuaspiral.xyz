@@ -2,35 +2,35 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://joshuaspiral.xyz/</loc>
+    <loc>https://joshuaspiral.xyz/</loc>
     <lastmod>2022-03-30T11:45:01+08:00</lastmod>
     <priority>0</priority>
   </url><url>
-    <loc>http://joshuaspiral.xyz/tags/ai/</loc>
+    <loc>https://joshuaspiral.xyz/tags/ai/</loc>
     <lastmod>2022-03-30T11:45:01+08:00</lastmod>
   </url><url>
-    <loc>http://joshuaspiral.xyz/tags/c/</loc>
+    <loc>https://joshuaspiral.xyz/tags/c/</loc>
     <lastmod>2022-03-30T11:45:01+08:00</lastmod>
   </url><url>
-    <loc>http://joshuaspiral.xyz/posts/making-a-connect-four-ai/</loc>
+    <loc>https://joshuaspiral.xyz/posts/making-a-connect-four-ai/</loc>
     <lastmod>2022-03-30T11:45:01+08:00</lastmod>
   </url><url>
-    <loc>http://joshuaspiral.xyz/posts/</loc>
+    <loc>https://joshuaspiral.xyz/posts/</loc>
     <lastmod>2022-03-30T11:45:01+08:00</lastmod>
   </url><url>
-    <loc>http://joshuaspiral.xyz/tags/programming/</loc>
+    <loc>https://joshuaspiral.xyz/tags/programming/</loc>
     <lastmod>2022-03-30T11:45:01+08:00</lastmod>
   </url><url>
-    <loc>http://joshuaspiral.xyz/tags/</loc>
+    <loc>https://joshuaspiral.xyz/tags/</loc>
     <lastmod>2022-03-30T11:45:01+08:00</lastmod>
   </url><url>
-    <loc>http://joshuaspiral.xyz/about/</loc>
+    <loc>https://joshuaspiral.xyz/about/</loc>
     <lastmod>2022-03-30T11:38:05+08:00</lastmod>
   </url><url>
-    <loc>http://joshuaspiral.xyz/categories/</loc>
+    <loc>https://joshuaspiral.xyz/categories/</loc>
   </url><url>
-    <loc>http://joshuaspiral.xyz/tags/index/</loc>
+    <loc>https://joshuaspiral.xyz/tags/index/</loc>
   </url><url>
-    <loc>http://joshuaspiral.xyz/series/</loc>
+    <loc>https://joshuaspiral.xyz/series/</loc>
   </url>
 </urlset>

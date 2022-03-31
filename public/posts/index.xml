@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on joshuaspiral.xyz</title>
-    <link>http://joshuaspiral.xyz/posts/</link>
+    <link>https://joshuaspiral.xyz/posts/</link>
     <description>Recent content in Posts on joshuaspiral.xyz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>© 2022 joshuaspiral</copyright>
-    <lastBuildDate>Wed, 30 Mar 2022 11:45:01 +0800</lastBuildDate><atom:link href="http://joshuaspiral.xyz/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 30 Mar 2022 11:45:01 +0800</lastBuildDate><atom:link href="https://joshuaspiral.xyz/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Making a Connect Four AI</title>
-      <link>http://joshuaspiral.xyz/posts/making-a-connect-four-ai/</link>
+      <link>https://joshuaspiral.xyz/posts/making-a-connect-four-ai/</link>
       <pubDate>Wed, 30 Mar 2022 11:45:01 +0800</pubDate>
       
-      <guid>http://joshuaspiral.xyz/posts/making-a-connect-four-ai/</guid>
+      <guid>https://joshuaspiral.xyz/posts/making-a-connect-four-ai/</guid>
       <description>DISCLAIMER Things in this article may be incorrect, and I do not know a lot about this topic. If there are any mistakes, please do not hesitate to correct me.
 Introduction I was tasked with creating a 2D array game for my computer science course, and I went with Tic Tac Toe. Soon after, I wrote an AI for it using the minimax algorithm. I wrote it in Python because it was quick to put together.</description>
     </item>
