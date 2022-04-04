@@ -28,5 +28,15 @@ Introduction I was tasked with creating a 2D array game for my computer science 
 Software I use My current setup is Artix Linux with dwm and dwmblocks, by suckless, running on X. Here are my dotfiles (note that they are very CUSTOMISED for me, do not blindly copy the configs).</description>
     </item>
     
+    <item>
+      <title></title>
+      <link>https://joshuaspiral.xyz/posts/colemak/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://joshuaspiral.xyz/posts/colemak/</guid>
+      <description>title: &amp;ldquo;Learning Colemak&amp;rdquo; date: 2022-03-30T11:45:01+08:00 description: &amp;ldquo;The journey of learning colemak&amp;rdquo; author: &amp;ldquo;Joshua&amp;rdquo; tags: [&amp;ldquo;keyboards&amp;rdquo;, &amp;ldquo;improvement&amp;rdquo;, &amp;ldquo;technology&amp;rdquo;] category: &amp;ldquo;article&amp;rdquo; draft: false
+ Introduction The most common keyboard layout on computers nowadays is the QWERTY layout. With knowledge of this fact, it may lead you to believe that it is simply the most efficient layout that exists. However, the real reason most keyboards use this layout is simply due to the first typewriters getting jammed with other layouts.</description>
+    </item>
+    
   </channel>
 </rss>
